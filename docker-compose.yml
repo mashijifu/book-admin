@@ -1,0 +1,32 @@
+# docker-composeのバージョンを指定
+version: "3"
+services:
+  db:
+    # 使用するイメージを指定(dbでmysqlを指定しています)
+    image: mysql:8.0
+    # ディレクトリのマウント設定（dbデータなどを残せます）
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    # mysqlのパスワードを指定。環境変数を定義
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    # ポート番号の指定。[ホスト：コンテナ]で設定
+    ports:
+        - "3306:3306"
+  web:
+    # Dockerfileがあるパス
+    build: .
+    # 「server.pidファイルを削除」と「rails s」を実行するコマンド
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3002 -b '0.0.0.0'"
+    volumes:
+      - .:/book_admin
+      - gem_data:/usr/local/bundle
+    ports:
+      - "3002:3002"
+    # 依存関係を設定。dbが起動してからwebへ起動することになる
+    depends_on:
+      - db
+# データとgemを永続化する
+volumes:
+  mysql_data:
+  gem_data:
