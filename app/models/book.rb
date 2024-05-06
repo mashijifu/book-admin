@@ -20,4 +20,12 @@ class Book < ApplicationRecord
   validates :name, presence: true
   validates :name, length: { maximum: 25 }
   validates :price, numericality: { greater_than_or_equal_to: 0 }
+
+  # validateブロックを使用したバリデーション
+  # 以下のバリデーションは、本の名前に「exercise」という文字列が含まれている場合に、バリデーションエラーを発生させる
+  validate do |book|
+    if book.name.include?("exercise")
+      book.errors[:name] << "I don't like exercise."
+    end
+  end
 end
