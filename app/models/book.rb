@@ -28,4 +28,21 @@ class Book < ApplicationRecord
       book.errors[:name] << "I don't like exercise."
     end
   end
+
+  # before_validationブロックを使用したバリデーション
+  # 以下のバリデーションは、本の名前に「Cat」という文字列が含まれていた場合に、「lovely Cat」という文字列に置き換える
+  before_validation do
+    self.name = self.name.gsub(/Cat/) do |matched|
+      "lovely #{matched}"
+    end
+  end
+
+  # あるいはメソッドを使用して以下のようにも書ける
+  # before_validation :add_lovely_to_cat
+
+  # def add_lovely_to_cat
+  #   self.name = self.name.gsub(/Cat/) do |matched|
+  #     "lovely #{matched}"
+  #   end
+  # end
 end
