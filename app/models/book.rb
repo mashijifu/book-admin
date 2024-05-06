@@ -45,4 +45,10 @@ class Book < ApplicationRecord
   #     "lovely #{matched}"
   #   end
   # end
+
+  # after_destroyブロックを使用したコールバック
+  # 以下のコールバックは、本が削除された後に、削除された本の名前をログに出力する
+  after_destroy do
+    Rails.logger.info "Book is deleted: #{self.attributes}"
+  end
 end
