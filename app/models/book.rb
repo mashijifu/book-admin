@@ -61,4 +61,10 @@ class Book < ApplicationRecord
   def high_price?
     price >= 5000
   end
+
+  enum sales_status: {
+    reservation: 0, # 予約受付
+    now_on_sale: 1, # 発売中
+    end_of_print: 2, # 販売終了
+  }
 end
